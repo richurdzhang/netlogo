@@ -336,19 +336,32 @@ end
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 to move-up
-  ask pacmans [ set new-heading 0 ]
+
+  if gogo:read-sensor 2 = 1023 [
+     ask pacmans [set new-heading 0 ]
+  ]
 end
 
 to move-right
-  ask pacmans [ set new-heading 90 ]
+
+    if gogo:read-sensor 3 = 1023 [
+     ask pacmans [ set new-heading 90
+    ]
+  ]
 end
 
 to move-down
-  ask pacmans [ set new-heading 180 ]
+
+    if gogo:read-sensor 4 = 1023 [
+      ask pacmans [ set new-heading 180
+    ]
+    ]
 end
 
 to move-left
-  ask pacmans [ set new-heading 270 ]
+  if gogo:read-sensor 5 = 1023 [
+    ask pacmans [ set new-heading 270 ]
+  ]
 end
 
 
@@ -434,7 +447,7 @@ BUTTON
 213
 Up
 move-up
-NIL
+T
 1
 T
 OBSERVER
@@ -451,7 +464,7 @@ BUTTON
 246
 Right
 move-right
-NIL
+T
 1
 T
 OBSERVER
@@ -468,7 +481,7 @@ BUTTON
 246
 Down
 move-down
-NIL
+T
 1
 T
 OBSERVER
@@ -485,7 +498,7 @@ BUTTON
 246
 Left
 move-left
-NIL
+T
 1
 T
 OBSERVER
@@ -615,6 +628,12 @@ Add new enemies that behave differently from the ghosts.
 This model makes use of breeds, create-<breed>, every, and user-message.
 
 The "import-world" command is used to read in the different maze configurations (levels).
+
+## REFLECTION
+
+We changed the model by using button and lever switch to control the game. The button is used to start playing the game, and the lever switches are used to control the directions. We created a new boolean variable play to check whether the button is pressed. When button pressed, the play variable will be set to true, and the game start. If pac-man died, or level-up, we changed play to false. To read all the sensors value and used it to control the gameplay, we used if statement to check whether button or lever switches are pressed. 
+
+What we learned while exploring the physical component is that, we cannot control the game purely through the sensors, we still need netlogo interfaces, for example, to activate the forever button first, and then control the rest of the game with sensors. 
 
 ## HOW TO CITE
 
