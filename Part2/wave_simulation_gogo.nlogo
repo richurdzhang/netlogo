@@ -12,7 +12,7 @@ end
 
 to initialize
   gogo:talk-to-output-ports ["B"]
-  gogo:set-servo servo_ang
+  gogo:set-servo 37
 end
 
 ;globals{
@@ -24,23 +24,23 @@ end
 to move_servo
 
   gogo:talk-to-output-ports ["B"]
-  gogo:set-servo 25
+  gogo:set-servo servo_ang
   wait time ; change the time here for faster frequency or lower frequency
-  gogo:set-servo servo_ang ; change the servo angle to control ...
+  gogo:set-servo 37 ; change the servo angle to control ...
   wait time
 end
 
-to count_tick
-  show servo_ang - ticks
-  if ticks > servo_ang - 25 [
-    reset-ticks
-    gogo:set-servo servo_ang
-  ]
-  gogo:talk-to-output-ports ["B"]
-  gogo:set-servo servo_ang - ticks
-  tick
-  wait time
-end
+;to count_tick
+ ; show servo_ang - ticks
+  ;if ticks > 37 - servo_ang [
+   ; reset-ticks
+    ;gogo:set-servo servo_ang
+  ;]
+  ;gogo:talk-to-output-ports ["B"]
+  ;gogo:set-servo servo_ang - ticks
+  ;tick
+  ;wait time
+;end
 @#$#@#$#@
 GRAPHICS-WINDOW
 505
@@ -128,9 +128,9 @@ SLIDER
 58
 servo_ang
 servo_ang
-30
-40
-30.0
+20
+35
+37.0
 1
 1
 NIL
@@ -159,7 +159,7 @@ INPUTBOX
 282
 130
 time
-0.1
+0.2
 1
 0
 Number
