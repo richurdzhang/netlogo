@@ -60,7 +60,7 @@ end
 GRAPHICS-WINDOW
 320
 25
-811
+1291
 517
 -1
 -1
@@ -75,7 +75,7 @@ GRAPHICS-WINDOW
 1
 1
 0
-160
+320
 -80
 80
 0
@@ -127,7 +127,7 @@ servo_ang
 servo_ang
 20
 35
-20.0
+24.0
 1
 1
 NIL
@@ -156,7 +156,7 @@ INPUTBOX
 235
 135
 time
-0.03
+0.04
 1
 0
 Number
