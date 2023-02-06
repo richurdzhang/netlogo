@@ -1,4 +1,3 @@
-extensions [gogo]
 turtles-own [yvel ypos]
 
 ; Public Domain:
@@ -10,43 +9,16 @@ to setup
   create-turtles world-width[
     set xcor who
     set color red
-    set size 1.5]
-  initialize
+    set size 1.5
+  ]
   reset-ticks
 end
 
-to initialize
-  gogo:talk-to-output-ports ["B"]
-  gogo:set-servo 37 ;initialize to the start position
-end
-
-
-to move_servo
-  gogo:talk-to-output-ports ["B"]
-  gogo:set-servo servo_ang
-  wait time ; change the time here for faster frequency or lower frequency
-  gogo:set-servo 37 ; change the servo angle to control amplitude?
-  wait time
-end
-
-to move_servo_tick
-  show 37 - (ticks mod (37 - servo_ang))
-  if ticks mod (37 - servo_ang) > 37 - servo_ang [
-   ; reset-ticks
-    gogo:set-servo servo_ang
-  ]
-  gogo:talk-to-output-ports ["B"]
-  gogo:set-servo 37 - ticks mod (37 - servo_ang)
-  wait time
-end
-
-
 to go
-  move_servo_tick
   ask turtles with [color = red]  ;; the green turtle is the driving force
   [
     ;set ypos 30 * sin ((ticks mod 160 + xcor) * (1 / time))
-    set ypos (37 - servo_ang) * 3 *  ( sin (xcor * (1 / (time * (37 - servo_ang))) + ticks))
+    set ypos 30 *  ( sin (xcor * (1 / time) + ticks / 10))
     ifelse patch-at 0 (ypos - ycor) != nobody ;; hide turtles outside the visible world
     [
       set ycor ypos
@@ -58,10 +30,10 @@ to go
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-320
-25
-811
-517
+329
+46
+1300
+538
 -1
 -1
 3.0
@@ -75,7 +47,7 @@ GRAPHICS-WINDOW
 1
 1
 0
-160
+320
 -80
 80
 0
@@ -84,90 +56,41 @@ GRAPHICS-WINDOW
 ticks
 30.0
 
-BUTTON
-20
-75
-117
-108
-Servomove
-move_servo
-T
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-20
-25
-115
-58
-setup
-setup
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-SLIDER
-135
-25
-307
-58
-servo_ang
-servo_ang
-20
-35
-20.0
-1
-1
-NIL
-HORIZONTAL
-
-BUTTON
-20
-125
-152
-158
-NIL
-move_servo_tick
-T
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
 INPUTBOX
-170
-75
-235
-135
+43
+56
+192
+116
 time
-0.03
+1.0
 1
 0
 Number
 
 BUTTON
-100
-185
-163
-218
+58
+176
+124
+209
+setup
+setup\n
 NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+111
+257
+174
+290
 go
+go\n
 T
 1
 T
@@ -181,60 +104,39 @@ NIL
 @#$#@#$#@
 ## WHAT IS IT?
 
-This simple model communicates with the sensors and output ports of a GoGo Board, an open source, easy-to-build, low cost, general purpose circuit board designed for educational projects. It uses the [`gogo` extension](https://github.com/NetLogo/GoGo-HID-Extension), which interfaces with GoGo boards running Human Interface Driver (HID) firmware.
-
-This model helps you test your connection to your GoGo Board, and serves as a starting point for building NetLogo activities that interact with the physical world. For a more complete version of this model, try the GoGoMonitor.
+(a general understanding of what the model is trying to show or explain)
 
 ## HOW IT WORKS
 
-The GoGo Extension for NetLogo provides primitives for communicating with a Gogo Board
-connected to your computer's USB port. You can get information from sensors and control motors, LEDs, light, and relays.
+(what rules the agents use to create the overall behavior of the model)
 
 ## HOW TO USE IT
 
-Connect a GoGo Board to your computer's USB port . Then connect sensors, motors, LEDs, relays, and lights to the board.
+(how to use the model, including a description of each of the items in the Interface tab)
 
-The GoGo board will beep when it is plugged in, letting you know it is connected. Try clicking the BEEP, LED ON, and LED OFF buttons to confirm the board is receiving data from the model. These three buttons control on-board features of the GoGo board, so no additional sensors need be connected.
+## THINGS TO NOTICE
 
-The sensor monitor shows the value of sensor 1.
-
-The output port controls let you control the motors and lights connected to the output ports "A" of your GoGo board.
-
-A-ON turns the output port(s) on.
-
-A-OFF turns the output port(s) off.
-
-A-CLOCKWISE/COUNTER-CLOCKWISE control the direction of current to the output port(s).  If a motor is connected to the output port, this determines the direction of motion.
-
-To change the amount of current going to the output port(s), set the A-POWER slider, then press the SET-A-POWER button.
-
-To plot sensor 1 values, start the PLOT SENSOR forever button.  At any time, you can clear the plot with the CLEAR PLOT button.  To export the data in your plot, right-click (on Macs, control-click) on the plot and choose "Export...".
+(suggested things for the user to notice while running the model)
 
 ## THINGS TO TRY
 
-Try connecting different sensors to the GoGo Board: temperature sensors, light sensors, pressure sensors, etc.
-
-Connect various motors, lights, and other circuits to the GoGo Board's output ports.
-
-To find out where to buy sensors and motors, go to the GoGo Board website (www.gogoboard.org)
+(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
 
 ## EXTENDING THE MODEL
 
-Modify the plot to plot more sensors.
-Add filters and normalization to the sensor data.
-Using a light sensor, make a turtle move forward when it's dark, and stop when there is light.
+(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
 
 ## NETLOGO FEATURES
 
-This model uses the NetLogo GoGo Extension. For more information, see the GoGo Extension section of the NetLogo User Manual.
+(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
+
+## RELATED MODELS
+
+(models in the NetLogo Models Library and elsewhere which are of related interest)
 
 ## CREDITS AND REFERENCES
 
-To learn about GoGo Boards, see https://gogoboard.org.
-
-This model was created by Paulo Blikstein at Stanford's [Transformative Learning Technologies Lab](https://tltlab.org).
-
-<!-- 2012 -->
+(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
 @#$#@#$#@
 default
 true
@@ -428,6 +330,22 @@ Polygon -7500403 true true 135 105 90 60 45 45 75 105 135 135
 Polygon -7500403 true true 165 105 165 135 225 105 255 45 210 60
 Polygon -7500403 true true 135 90 120 45 150 15 180 45 165 90
 
+sheep
+false
+15
+Circle -1 true true 203 65 88
+Circle -1 true true 70 65 162
+Circle -1 true true 150 105 120
+Polygon -7500403 true false 218 120 240 165 255 165 278 120
+Circle -7500403 true false 214 72 67
+Rectangle -1 true true 164 223 179 298
+Polygon -1 true true 45 285 30 285 30 240 15 195 45 210
+Circle -1 true true 3 83 150
+Rectangle -1 true true 65 221 80 296
+Polygon -1 true true 195 285 210 285 210 240 240 210 195 210
+Polygon -7500403 true false 276 85 285 105 302 99 294 83
+Polygon -7500403 true false 219 85 210 105 193 99 201 83
+
 square
 false
 0
@@ -512,6 +430,13 @@ Line -7500403 true 40 84 269 221
 Line -7500403 true 40 216 269 79
 Line -7500403 true 84 40 221 269
 
+wolf
+false
+0
+Polygon -16777216 true false 253 133 245 131 245 133
+Polygon -7500403 true true 2 194 13 197 30 191 38 193 38 205 20 226 20 257 27 265 38 266 40 260 31 253 31 230 60 206 68 198 75 209 66 228 65 243 82 261 84 268 100 267 103 261 77 239 79 231 100 207 98 196 119 201 143 202 160 195 166 210 172 213 173 238 167 251 160 248 154 265 169 264 178 247 186 240 198 260 200 271 217 271 219 262 207 258 195 230 192 198 210 184 227 164 242 144 259 145 284 151 277 141 293 140 299 134 297 127 273 119 270 105
+Polygon -7500403 true true -1 195 14 180 36 166 40 153 53 140 82 131 134 133 159 126 188 115 227 108 236 102 238 98 268 86 269 92 281 87 269 103 269 113
+
 x
 false
 0
@@ -520,7 +445,6 @@ Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
 NetLogo 6.3.0
 @#$#@#$#@
-need-to-manually-make-preview-for-this-model
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
@@ -536,5 +460,5 @@ true
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
 @#$#@#$#@
-1
+0
 @#$#@#$#@

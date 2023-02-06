@@ -46,7 +46,7 @@ to go
   ask turtles with [color = red]  ;; the green turtle is the driving force
   [
     ;set ypos 30 * sin ((ticks mod 160 + xcor) * (1 / time))
-    set ypos (37 - servo_ang) * 3 *  ( sin (xcor * (1 / (time * (37 - servo_ang))) + ticks))
+    set ypos (37 - servo_ang) * 3 *  ( sin (xcor * (1 / time) * (37 - servo_ang) / 10) + ticks)
     ifelse patch-at 0 (ypos - ycor) != nobody ;; hide turtles outside the visible world
     [
       set ycor ypos
@@ -127,7 +127,7 @@ servo_ang
 servo_ang
 20
 35
-20.0
+22.0
 1
 1
 NIL
@@ -156,7 +156,7 @@ INPUTBOX
 235
 135
 time
-0.03
+0.05
 1
 0
 Number
