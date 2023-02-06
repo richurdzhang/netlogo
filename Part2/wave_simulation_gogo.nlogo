@@ -1,55 +1,98 @@
 extensions [gogo]
-
+turtles-own [yvel ypos]
 
 ; Public Domain:
 ; To the extent possible under law, Uri Wilensky has waived all
 ; copyright and related or neighboring rights to this model.
 to setup
   clear-all
-  initialize
+  set-default-shape turtles "circle"
+  create-turtles world-width[
+    set xcor who
+    set color red
+    set size 1.5
+    ;if pxcor = max-pxcor
+     ; [ set color blue ]            ;; rightmost turtle is blue
+    if pxcor = min-pxcor
+      [ set color green ]           ;; leftmost turtle is green
+  ]
+  ;initialize
   reset-ticks
 end
 
 to initialize
   gogo:talk-to-output-ports ["B"]
-  gogo:set-servo 37
+  gogo:set-servo 37 ;initialize to the start position
 end
-
-;globals{
-
-
-;}
 
 
 to move_servo
-
   gogo:talk-to-output-ports ["B"]
   gogo:set-servo servo_ang
   wait time ; change the time here for faster frequency or lower frequency
-  gogo:set-servo 37 ; change the servo angle to control ...
+  gogo:set-servo 37 ; change the servo angle to control amplitude?
   wait time
 end
 
-;to count_tick
- ; show servo_ang - ticks
-  ;if ticks > 37 - servo_ang [
-   ; reset-ticks
-    ;gogo:set-servo servo_ang
+to move_servo_tick
+  show 37 - ticks
+  if ticks > 37 - servo_ang [
+    reset-ticks
+    gogo:set-servo servo_ang
+  ]
+  gogo:talk-to-output-ports ["B"]
+  gogo:set-servo 37 - ticks
+  tick
+  wait time
+end
+
+
+
+to go
+  ask turtles with [color = red]  ;; the green turtle is the driving force
+  [
+    ifelse ticks > 100  ;; ramp the force up gradually to avoid spikes in the wave
+       [ set ypos 30 * sin ((ticks mod 160 + xcor) * (1 / time)) ]
+       [ set ypos 30 * sin ((ticks mod 160 + xcor) * (1 / time)) ]
+    ifelse patch-at 0 (ypos - ycor) != nobody ;; hide turtles outside the visible world
+    [
+      set ycor ypos
+      show-turtle
+    ]
+    [ hide-turtle ]
+  ]
+  ;;;
+  ;;;ask turtles with [color = red]  ;;the red turtles respond to their neighbors' positions
+ ;;; [ ;; make your new y velocity equal to your old one + the average pos of your two neighbors
+    ;ifelse who = 160
+   ; [ set yvel yvel + (([ypos] of (turtle (who - 1))) - ypos)]
+    ;[
+   ; set yvel yvel + ((([ypos] of (turtle (who - 1))) - ypos) +
+    ;                 (([ypos] of (turtle (who + 1))) - ypos))
+    ;]
   ;]
-  ;gogo:talk-to-output-ports ["B"]
-  ;gogo:set-servo servo_ang - ticks
-  ;tick
-  ;wait time
-;end
+  ;; we need two separate ask blocks here so all the turtles calculate their
+  ;; new velocities before any turtles move
+  ;ask turtles with [color = red]
+  ;[ ;; calculate new y position
+   ; set ypos ypos + yvel                    ;; calculate new y position
+    ;ifelse patch-at 0 (ypos - ycor) != nobody ;; hide turtles outside the visible world
+     ; [ set ycor ypos
+      ;  show-turtle ]
+      ;[ hide-turtle ]
+  ;]
+  tick
+
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
-505
-385
-813
-494
+320
+25
+811
+517
 -1
 -1
-100.0
+3.0
 1
 10
 1
@@ -59,10 +102,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--1
-1
 0
-0
+160
+-80
+80
 0
 0
 0
@@ -75,7 +118,7 @@ BUTTON
 117
 108
 Servomove
-move_servo\n
+move_servo
 T
 1
 T
@@ -85,24 +128,6 @@ NIL
 NIL
 NIL
 1
-
-PLOT
-15
-375
-835
-545
-Sensors
-NIL
-NIL
-0.0
-10.0
-0.0
-1023.0
-true
-true
-"" ""
-PENS
-"sensor 1" 1.0 0 -2674135 true "" "plot gogo:read-sensor 1"
 
 BUTTON
 20
@@ -130,7 +155,7 @@ servo_ang
 servo_ang
 20
 35
-37.0
+28.0
 1
 1
 NIL
@@ -139,10 +164,10 @@ HORIZONTAL
 BUTTON
 20
 125
-112
+152
 158
 NIL
-count_tick
+move_servo_tick
 T
 1
 T
@@ -154,15 +179,32 @@ NIL
 1
 
 INPUTBOX
+170
+75
+235
 135
-70
-282
-130
 time
-0.2
+0.5
 1
 0
 Number
+
+BUTTON
+100
+185
+163
+218
+NIL
+go
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
