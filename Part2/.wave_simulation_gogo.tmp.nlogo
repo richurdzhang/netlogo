@@ -195,7 +195,7 @@ Click setup to initialize the servo, as well as the virtual model. Change the se
 ## EXTENDING THE MODEL
 
 Add buttons to start the model.
-Considering the force and interaction from the reversing force from the other end of wave
+Considering the force 
 
 ## NETLOGO FEATURES
 
@@ -205,7 +205,9 @@ This model uses the NetLogo GoGo Extension. For more information, see the GoGo E
 
 To learn about GoGo Boards, see https://gogoboard.org.
 
-<!-- 2023 -->
+This model was created by Paulo Blikstein at Stanford's [Transformative Learning Technologies Lab](https://tltlab.org).
+
+<!-- 2012 -->
 @#$#@#$#@
 default
 true
